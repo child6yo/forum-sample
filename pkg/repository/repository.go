@@ -1,27 +1,19 @@
 package repository
 
 import (
+	"github.com/child6yo/forum-sample"
+	"github.com/jmoiron/sqlx"
 )
 
 type Authorization interface {
-
-}
-
-type TodoList interface {
-
-}
-
-type TodoItem interface {
-
+	CreateUser(user forum.User) (int, error)
 }
 
 type Repository struct {
 	Authorization
-	TodoList
-	TodoItem
 }
 
-func NewRepository() *Repository {
+func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
 	}
 }
