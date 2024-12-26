@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/child6yo/forum-sample"
@@ -13,34 +14,36 @@ import (
 )
 
 func initConfig() error {
-	viper.AddConfigPath("configs")
+	viper.AddConfigPath("config")
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }
 
-
 func main() {
 	if err := initConfig(); err != nil {
+		log.Fatal("config not initialized")
 	}
 
 	if err := godotenv.Load(); err != nil {
+		log.Fatal("env not initialized")
     }
 
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
 		Username: viper.GetString("db.username"),
-		Password: os.Getenv("DB_PASSWORD"),
 		DBName:   viper.GetString("db.dbname"),
 		SSLMode:  viper.GetString("db.sslmode"),
+		Password: os.Getenv("DB_PASSWORD"),
 	})
     if err != nil {
+		log.Fatal("not connected to db: ", err)
 	}
 
-
-    srv := new(forum.Server)
     repos := repository.NewRepository(db)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
-    srv.Run(viper.GetString("port"), handlers.InitRoutes())
+	
+    srv := new(forum.Server)
+    srv.Run("8000", handlers.InitRoutes())
 }

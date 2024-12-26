@@ -7,6 +7,7 @@ import (
 
 type Authorization interface {
 	CreateUser(user forum.User) (int, error)
+	GetUser(username, password string) (forum.User, error)
 }
 
 type Repository struct {
@@ -15,5 +16,6 @@ type Repository struct {
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
+		Authorization: NewAuth(db),
 	}
 }
