@@ -10,12 +10,21 @@ type Authorization interface {
 	GetUser(username, password string) (forum.User, error)
 }
 
+type Posts interface {
+	CreatePost(post forum.Posts) (forum.Posts, error)
+	GetPostById(id int) (forum.Posts, error)
+	GetAllPosts() ([]forum.PostsList, error)
+	UpdatePost(userId, postId int) (forum.Posts, error)
+}
+
 type Repository struct {
 	Authorization
+	Posts
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
 	return &Repository{
-		Authorization: NewAuth(db),
+		Authorization: NewAuthDatabase(db),
+		Posts:         NewPostsDatabase(db),
 	}
 }

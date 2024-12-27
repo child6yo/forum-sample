@@ -11,12 +11,20 @@ type Authorization interface {
 	ParseToken(token string) (int, error)
 }
 
+type Posts interface {
+	CreatePost(post forum.Posts) (forum.Posts, error)
+	GetById(id int) (forum.Posts, error)
+	GetAllPosts() ([]forum.PostsList, error)
+}
+
 type Service struct {
 	Authorization
+	Posts
 }
 
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
+		Posts: NewPostsServise(repos.Posts),
 	}
 }
