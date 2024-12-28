@@ -13,8 +13,10 @@ type Authorization interface {
 
 type Posts interface {
 	CreatePost(post forum.Posts) (forum.Posts, error)
-	GetById(id int) (forum.Posts, error)
+	GetPostById(id int) (forum.Posts, error)
 	GetAllPosts() ([]forum.PostsList, error)
+	UpdatePost(userId, postId int, input forum.UpdatePostInput) error
+	DeletePost(userId, postId int) error
 }
 
 type Service struct {
@@ -25,6 +27,6 @@ type Service struct {
 func NewService(repos *repository.Repository) *Service {
 	return &Service{
 		Authorization: NewAuthService(repos.Authorization),
-		Posts: NewPostsServise(repos.Posts),
+		Posts:         NewPostsServise(repos.Posts),
 	}
 }

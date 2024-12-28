@@ -14,7 +14,8 @@ type Posts interface {
 	CreatePost(post forum.Posts) (forum.Posts, error)
 	GetPostById(id int) (forum.Posts, error)
 	GetAllPosts() ([]forum.PostsList, error)
-	UpdatePost(userId, postId int) (forum.Posts, error)
+	UpdatePost(userId, postId int, input forum.UpdatePostInput) error
+	DeletePost(userId, postId int) error
 }
 
 type Repository struct {

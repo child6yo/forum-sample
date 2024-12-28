@@ -28,9 +28,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		{
 			posts := v1.Group("/posts")
 			{
-				posts.POST("/", h.CreatePost)
-				posts.GET("/", h.GetAllPosts)
-				posts.GET("/:id", h.GetPostById)
+				posts.POST("/", h.createPost)
+				posts.GET("/", h.getAllPosts)
+				posts.GET("/:id", h.getPostById)
+				posts.PUT("/:id", h.updatePost)
+				posts.DELETE("/:id", h.deletePost)
 			}
 		}
 	}

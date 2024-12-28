@@ -1,18 +1,38 @@
 package forum
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type Posts struct {
 	Id      int       `json:"id" db:"id"`
 	UserId  int       `json:"user_id" db:"user_id"`
 	Title   string    `json:"title" db:"title" binding:"required"`
 	Content string    `json:"content" db:"content" binding:"required"`
-	CrDate  time.Time `json:"cr_date" db:"cr_date"`
+	CrTime  time.Time `json:"cr_date" db:"cr_date"`
+	Update  bool      `json:"update" db:"update"`
+	UpdTime time.Time `json:"upd_time" db:"upd_time"`
 }
 
 type PostsList struct {
 	Id      int       `json:"id" db:"id"`
 	UserId  int       `json:"user_id" db:"user_id"`
-	Title  string    `json:"title" db:"title"`
-	CrDate time.Time `json:"cr_date" db:"cr_date"`
+	Title   string    `json:"title" db:"title"`
+	CrTime  time.Time `json:"cr_date" db:"cr_date"`
+	UpdTime time.Time `json:"upd_time" db:"upd_time"`
+}
+
+type UpdatePostInput struct {
+	Title   *string    `json:"title"`
+	Content *string    `json:"description"`
+	UpdTime *time.Time `json:"upd_time"`
+}
+
+func (i UpdatePostInput) Validate() error {
+	if i.Title == nil && i.Content == nil {
+		return errors.New("update structure has no values")
+	}
+
+	return nil
 }

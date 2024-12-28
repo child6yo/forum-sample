@@ -12,5 +12,7 @@ CREATE TABLE posts
     user_id     int references users (id) on delete cascade not null,
     title       varchar(255) not null,
     content     text         not null,
-    cr_date     timestamp    not null
+    cr_time     timestamp    not null,
+    update      bool         not null,
+    upd_time    timestamp    not null
 );

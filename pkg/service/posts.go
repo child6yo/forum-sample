@@ -17,14 +17,28 @@ func NewPostsServise(repo repository.Posts) *PostsServise {
 
 func (s *PostsServise) CreatePost(post forum.Posts) (forum.Posts, error) {
 	time := time.Now()
-	post.CrDate = time
+	post.CrTime = time
 	return s.repo.CreatePost(post)
 }
 
-func (s *PostsServise) GetById(id int) (forum.Posts, error) {
+func (s *PostsServise) GetPostById(id int) (forum.Posts, error) {
 	return s.repo.GetPostById(id)
 }
 
 func (s *PostsServise) GetAllPosts() ([]forum.PostsList, error) {
 	return s.repo.GetAllPosts()
+}
+
+func (s *PostsServise) UpdatePost(userId, postId int, input forum.UpdatePostInput) error {
+	if err := input.Validate(); err != nil {
+		return err
+	}
+
+	time := time.Now()
+	input.UpdTime = &time
+	return s.repo.UpdatePost(userId, postId, input)
+}
+
+func (s *PostsServise) DeletePost(userId, postId int) error {
+	return s.repo.DeletePost(userId, postId)
 }
