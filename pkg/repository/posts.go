@@ -16,7 +16,7 @@ func NewPostsDatabase(db *sqlx.DB) *PostsDatabase {
 	return &PostsDatabase{db: db}
 }
 
-func (r *PostsDatabase) CreatePost(post forum.Posts) (forum.Posts, error) {
+func (r *PostsDatabase) CreatePost(post forum.Posts) (int, error) {
 	var id int
 
 	query := fmt.Sprintf(`INSERT INTO %s (user_id, title, content, cr_time, update, upd_time)
@@ -24,12 +24,10 @@ func (r *PostsDatabase) CreatePost(post forum.Posts) (forum.Posts, error) {
 
 	row := r.db.QueryRow(query, post.UserId, post.Title, post.Content, post.CrTime, post.Update, post.UpdTime)
 	if err := row.Scan(&id); err != nil {
-		return forum.Posts{}, err
+		return 0, err
 	}
 
-	newPost := post
-	newPost.Id = id
-	return newPost, nil
+	return id, nil
 }
 
 func (r *PostsDatabase) GetPostById(postId int) (forum.Posts, error) {

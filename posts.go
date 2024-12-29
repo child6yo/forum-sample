@@ -10,7 +10,7 @@ type Posts struct {
 	UserId  int       `json:"user_id" db:"user_id"`
 	Title   string    `json:"title" db:"title" binding:"required"`
 	Content string    `json:"content" db:"content" binding:"required"`
-	CrTime  time.Time `json:"cr_date" db:"cr_date"`
+	CrTime  time.Time `json:"cr_time" db:"cr_time"`
 	Update  bool      `json:"update" db:"update"`
 	UpdTime time.Time `json:"upd_time" db:"upd_time"`
 }
@@ -19,7 +19,7 @@ type PostsList struct {
 	Id      int       `json:"id" db:"id"`
 	UserId  int       `json:"user_id" db:"user_id"`
 	Title   string    `json:"title" db:"title"`
-	CrTime  time.Time `json:"cr_date" db:"cr_date"`
+	CrTime  time.Time `json:"cr_time" db:"cr_time"`
 	UpdTime time.Time `json:"upd_time" db:"upd_time"`
 }
 

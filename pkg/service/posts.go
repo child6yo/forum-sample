@@ -15,7 +15,7 @@ func NewPostsServise(repo repository.Posts) *PostsServise {
 	return &PostsServise{repo: repo}
 }
 
-func (s *PostsServise) CreatePost(post forum.Posts) (forum.Posts, error) {
+func (s *PostsServise) CreatePost(post forum.Posts) (int, error) {
 	time := time.Now()
 	post.CrTime = time
 	return s.repo.CreatePost(post)

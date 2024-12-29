@@ -10,6 +10,8 @@ import (
 const (
 	usersTable = "users"
 	postsTable = "posts"
+	threadsTable = "threads"
+	postThreadsTable = "post_threads"
 )
 
 type Config struct {

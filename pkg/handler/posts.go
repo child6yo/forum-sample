@@ -34,11 +34,13 @@ func (h *Handler) createPost(c *gin.Context) {
 func (h *Handler) getPostById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
+		log.Fatal("?")
 		return
 	}
 
 	post, err := h.services.Posts.GetPostById(id)
 	if err != nil {
+		log.Fatal(err)
 		return
 	}
 
