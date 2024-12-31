@@ -17,7 +17,7 @@ func (h *Handler) CreateThread(c *gin.Context) {
 	}
 	postId, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		log.Fatal("? ", err)
+		log.Fatal("? че ", err)
 		return
 	}
 	answerAt, err := strconv.Atoi(c.DefaultQuery("answer", "0"))
@@ -50,11 +50,27 @@ func (h *Handler) GetThreadById(c *gin.Context) {
 		return
 	}
 
-	post, err := h.services.Threads.GetThreadById(id)
+	thread, err := h.services.Threads.GetThreadById(id)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	c.JSON(http.StatusOK, post)
+	c.JSON(http.StatusOK, thread)
+}
+
+func (h *Handler) GetThreadByPost(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		log.Fatal("?")
+		return
+	}
+
+	threads, err := h.services.Threads.GetThreadsByPost(id)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	c.JSON(http.StatusOK, threads)
 }

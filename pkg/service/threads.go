@@ -21,12 +21,18 @@ func (s *ThreadsServise) CreateThread(postId int, thread forum.Threads) (int, er
 	return s.repo.CreateThread(postId, thread)
 }
 
-func (s *ThreadsServise)GetThreadById(threadId int) (forum.Threads, error) {
+func (s *ThreadsServise) GetThreadById(threadId int) (forum.Threads, error) {
 	return s.repo.GetThreadById(threadId)
 }
 
-func (s *ThreadsServise)GetThreadsByPost() {
+func (s *ThreadsServise) GetThreadsByPost(postId int) ([]*forum.ThreadsList, error) {
+	threads, err := s.repo.GetThreadsByPost(postId)
+	if err != nil {
+		return []*forum.ThreadsList{}, err
+	}
+	orgThr := OrganizeThreads(threads)
 
+	return orgThr, nil
 }
 
 func (s *ThreadsServise)UpdateThread() {
@@ -35,4 +41,29 @@ func (s *ThreadsServise)UpdateThread() {
 
 func (s *ThreadsServise)DeleteThread() {
 	
+}
+
+func OrganizeThreads(threads []forum.Threads) []*forum.ThreadsList {
+	idToThList := make(map[int]*forum.ThreadsList)
+	var ThList []*forum.ThreadsList
+
+	for _, th := range threads {
+		idToThList[th.Id] = &forum.ThreadsList{
+			Id:   th.Id,
+			UserId: th.UserId,
+			Content: th.Content,
+			CrTime: th.CrTime,
+			Update: th.Update,
+			UpdTime: th.UpdTime,
+			Answers:  []*forum.ThreadsList{},
+		}
+		if th.AnswerAt == 0 {
+			ThList = append(ThList, idToThList[th.Id])
+		} else {
+			parent := idToThList[th.AnswerAt]
+			parent.Answers = append(parent.Answers, idToThList[th.Id])
+		}
+	}
+	
+	return ThList
 }

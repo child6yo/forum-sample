@@ -15,10 +15,11 @@ func NewThreadsDatabase(db *sqlx.DB) *ThreadsDatabase {
 	return &ThreadsDatabase{db: db}
 }
 
-func (r *ThreadsDatabase) PostExists(postID int) (bool, error) {
+func (r *ThreadsDatabase) ThreadExists(threadId, postId int) (bool, error) {
     var exists bool
-    query := "SELECT EXISTS(SELECT 1 FROM threads WHERE id=$1)"
-    err := r.db.QueryRow(query, postID).Scan(&exists)
+    query := fmt.Sprintf(`SELECT EXISTS(SELECT 1 FROM %s t 
+                            INNER JOIN %s pt ON t.id = pt.thread_id WHERE t.id=$1 AND pt.post_id=$2)`, threadsTable, postThreadsTable)
+    err := r.db.QueryRow(query, threadId, postId).Scan(&exists)
     return exists, err
 }
 
@@ -29,7 +30,7 @@ func (r *ThreadsDatabase) CreateThread(postId int, thread forum.Threads) (int, e
     }
 
     if thread.AnswerAt != 0 {
-        exists, err := r.PostExists(thread.AnswerAt)
+        exists, err := r.ThreadExists(thread.AnswerAt, postId)
         if err != nil {
             tx.Rollback()
             return 0, err
@@ -69,12 +70,15 @@ func (r *ThreadsDatabase) GetThreadById(threadId int) (forum.Threads, error) {
 	return thread, err
 }
 
-func (r *ThreadsDatabase) GetThreadTree() {
+func (r *ThreadsDatabase) GetThreadsByPost(postId int) ([]forum.Threads, error) {
+    var threads []forum.Threads
 
-}
+    query := fmt.Sprintf(`SELECT t.id, t.user_id, t.content, t.answer_at, t.cr_time, t.update, t.upd_time 
+                            FROM %s t INNER JOIN %s pt on pt.thread_id = t.id WHERE pt.post_id=$1
+                            ORDER BY t.id`, threadsTable, postThreadsTable)
+	err := r.db.Select(&threads, query, postId)
 
-func (r *ThreadsDatabase) GetThreadsByPost() {
-
+	return threads, err
 }
 
 func (r *ThreadsDatabase) UpdateThread() {

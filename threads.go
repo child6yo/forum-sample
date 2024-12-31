@@ -17,3 +17,13 @@ type PostThreads struct {
 	PostId   int `json:"post_id" db:"post_id"`
 	ThreadId int `json:"thread_id" db:"thread_id"`
 }
+
+type ThreadsList struct {
+	Id      int       `json:"id"`
+	UserId  int       `json:"user_id"`
+	Content string    `json:"content"`
+	CrTime  time.Time `json:"cr_time"`
+	Update  bool      `json:"update"`
+	UpdTime time.Time `json:"upd_time"`
+	Answers []*ThreadsList `json:"threads"`
+}

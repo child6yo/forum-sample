@@ -37,6 +37,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 				threads := posts.Group("/:id/threads")
 				{
 					threads.POST("/", h.CreateThread)
+					threads.GET("/", h.GetThreadByPost)
 				}
 			}
 			threads := posts.Group("/threads")

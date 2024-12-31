@@ -8,7 +8,7 @@ import (
 func getUserId(c *gin.Context) (int, error) {
 	id, ok := c.Get("userId")
 	if !ok {
-		return 0, errors.New("?")
+		return 0, errors.New("не авторизует ")
 	}
 
 	idInt, ok := id.(int)

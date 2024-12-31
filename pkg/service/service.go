@@ -22,7 +22,7 @@ type Posts interface {
 type Threads interface {
 	CreateThread(postId int, thread forum.Threads) (int, error)
 	GetThreadById(threadId int) (forum.Threads, error)
-	GetThreadsByPost()
+	GetThreadsByPost(postId int) ([]*forum.ThreadsList, error)
 	UpdateThread()
 	DeleteThread()
 }

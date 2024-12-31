@@ -19,11 +19,10 @@ type Posts interface {
 }
 
 type Threads interface {
-	PostExists(postID int) (bool, error)
+	ThreadExists(threadId, postId int) (bool, error)
 	CreateThread(postId int, thread forum.Threads) (int, error)
 	GetThreadById(threadId int) (forum.Threads, error)
- 	GetThreadTree()
-	GetThreadsByPost()
+	GetThreadsByPost(postId int) ([]forum.Threads, error)
 	UpdateThread()
 	DeleteThread()
 }
