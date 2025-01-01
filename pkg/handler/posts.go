@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -12,94 +11,98 @@ import (
 func (h *Handler) createPost(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
+		errorResponse(c, "create post", http.StatusForbidden, err)
 		return
 	}
 
 	var input forum.Posts
 	if err := c.BindJSON(&input); err != nil {
-		log.Fatal("ne bindit")
+		errorResponse(c, "create post", http.StatusBadRequest, err)
 		return
 	}
 	input.UserId = userId
 
-	post, err := h.services.Posts.CreatePost(input)
+	id, err := h.services.Posts.CreatePost(input)
 	if err != nil {
-		log.Fatal("ne creatit ", err)
+		errorResponse(c, "create post", http.StatusInternalServerError, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, post)
+	successResponse(c, "create post", map[string]interface{}{
+		"post id": id,
+	})
 }
 
 func (h *Handler) getPostById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		log.Fatal("?")
+		errorResponse(c, "get post by id", http.StatusForbidden, err)
 		return
 	}
 
 	post, err := h.services.Posts.GetPostById(id)
 	if err != nil {
-		log.Fatal(err)
+		errorResponse(c, "get post by id", http.StatusInternalServerError, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, post)
-}
-
-type allPosts struct {
-	Posts []forum.PostsList `json:"posts"`
+	successResponse(c, "create post", post)
 }
 
 func (h *Handler) getAllPosts(c *gin.Context) {
 	posts, err := h.services.Posts.GetAllPosts()
 	if err != nil {
-		log.Fatal("ne daet", err)
+		errorResponse(c, "get all posts", http.StatusInternalServerError, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, allPosts{Posts: posts})
+	successResponse(c, "get all posts", posts)
 }
 
 func (h *Handler) updatePost(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
+		errorResponse(c, "update post", http.StatusForbidden, err)
 		return
 	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
+		errorResponse(c, "update post", http.StatusBadRequest, err)
 		return
 	}
 
 	var input forum.UpdatePostInput
 	if err := c.BindJSON(&input); err != nil {
+		errorResponse(c, "update post", http.StatusBadRequest, err)
 		return
 	}
 
 	if err := h.services.Posts.UpdatePost(userId, id, input); err != nil {
-		log.Print("err: ", err)
+		errorResponse(c, "update post", http.StatusForbidden, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	successResponse(c, "update post", nil)
 }
 
 func (h *Handler) deletePost(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
+		errorResponse(c, "delete post", http.StatusForbidden, err)
 		return
 	}
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
+		errorResponse(c, "delete post", http.StatusBadRequest, err)
 		return
 	}
 
 	if err := h.services.Posts.DeletePost(userId, id); err != nil {
-		log.Print("err: ", err)
+		errorResponse(c, "delete post", http.StatusForbidden, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	successResponse(c, "delete post", nil)
 }

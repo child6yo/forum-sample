@@ -54,7 +54,7 @@ func (r *PostsDatabase) UpdatePost(userId, postId int, input forum.UpdatePostInp
 	if err := r.db.Get(&id, query, postId); err != nil {
 		return err
 	} else if id != userId {
-		return fmt.Errorf("not your post)")
+		return fmt.Errorf("attempt to update someone else's post")
 	}
 
 	setValues := make([]string, 0)
@@ -92,7 +92,7 @@ func (r *PostsDatabase) DeletePost(userId, postId int) error {
 	if err := r.db.Get(&id, query, postId); err != nil {
 		return err
 	} else if id != userId {
-		return fmt.Errorf("not your post)")
+		return fmt.Errorf("attempt to delete someone else's post")
 	}
 
 	tx, err := r.db.Begin()
