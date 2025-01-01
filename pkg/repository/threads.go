@@ -81,10 +81,17 @@ func (r *ThreadsDatabase) GetThreadsByPost(postId int) ([]forum.Threads, error) 
 	return threads, err
 }
 
-func (r *ThreadsDatabase) UpdateThread() {
+func (r *ThreadsDatabase) UpdateThread(userId, threadId int, input forum.UpdateThreadInput) error {
+	var id int
+	query := fmt.Sprintf("SELECT user_id FROM %s WHERE id=$1", threadsTable)
+	if err := r.db.Get(&id, query, threadId); err != nil {
+		return err
+	} else if id != userId {
+		return fmt.Errorf("not your thread)")
+	}
 
-}
-
-func (r *ThreadsDatabase) DeleteThread() {
-	
+	query = fmt.Sprintf("UPDATE %s SET content=$1, update=true, upd_time=$2 WHERE id=%d",
+		threadsTable, threadId)
+	_, err := r.db.Exec(query, input.Content, input.UpdTime)
+	return err
 }

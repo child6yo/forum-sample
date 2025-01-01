@@ -95,7 +95,24 @@ func (r *PostsDatabase) DeletePost(userId, postId int) error {
 		return fmt.Errorf("not your post)")
 	}
 
-	query = fmt.Sprintf("DELETE FROM %s WHERE id=$1", postsTable)
-	_, err := r.db.Exec(query, postId)
-	return err
+	tx, err := r.db.Begin()
+    if err != nil {
+        return err
+    }
+
+	postThreadsQuery := fmt.Sprintf("DELETE FROM %s t USING %s pt WHERE pt.post_id=$1 AND t.id=pt.thread_id", threadsTable, postThreadsTable)
+	_, err = tx.Exec(postThreadsQuery, postId)
+    if err != nil {
+        tx.Rollback()
+        return err
+    }
+
+	postQuery := fmt.Sprintf("DELETE FROM %s WHERE id=$1", postsTable)
+	_, err = tx.Exec(postQuery, postId)
+	if err != nil {
+        tx.Rollback()
+        return err
+    }
+
+	return tx.Commit()
 }

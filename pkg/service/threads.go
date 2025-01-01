@@ -35,11 +35,17 @@ func (s *ThreadsServise) GetThreadsByPost(postId int) ([]*forum.ThreadsList, err
 	return orgThr, nil
 }
 
-func (s *ThreadsServise)UpdateThread() {
+func (s *ThreadsServise) UpdateThread(userId, threadId int, input forum.UpdateThreadInput) error {
+	if err := input.Validate(); err != nil {
+		return err
+	}
 
+	time := time.Now()
+	input.UpdTime = &time
+	return s.repo.UpdateThread(userId, threadId, input)
 }
 
-func (s *ThreadsServise)DeleteThread() {
+func (s *ThreadsServise) DeleteThread() {
 	
 }
 

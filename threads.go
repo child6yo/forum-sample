@@ -1,6 +1,9 @@
 package forum
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type Threads struct {
 	Id       int       `json:"id" db:"id"`
@@ -26,4 +29,17 @@ type ThreadsList struct {
 	Update  bool      `json:"update"`
 	UpdTime time.Time `json:"upd_time"`
 	Answers []*ThreadsList `json:"threads"`
+}
+
+type UpdateThreadInput struct {
+	Content *string    `json:"content"`
+	UpdTime *time.Time `json:"upd_time"`
+}
+
+func (i UpdateThreadInput) Validate() error {
+	if i.Content == nil {
+		return errors.New("update structure has no values")
+	}
+
+	return nil
 }

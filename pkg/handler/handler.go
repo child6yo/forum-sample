@@ -40,9 +40,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 					threads.GET("/", h.GetThreadByPost)
 				}
 			}
-			threads := posts.Group("/threads")
+			threads := v1.Group("/threads")
 			{
 				threads.GET("/:id", h.GetThreadById)
+				threads.PUT("/:id", h.UpdateThread)
 			}
 		}
 	}

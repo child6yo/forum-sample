@@ -74,3 +74,27 @@ func (h *Handler) GetThreadByPost(c *gin.Context) {
 
 	c.JSON(http.StatusOK, threads)
 }
+
+func (h *Handler) UpdateThread(c *gin.Context) {
+	userId, err := getUserId(c)
+	if err != nil {
+		return
+	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		return
+	}
+
+	var input forum.UpdateThreadInput
+	if err := c.BindJSON(&input); err != nil {
+		return
+	}
+
+	if err := h.services.Threads.UpdateThread(userId, id, input); err != nil {
+		log.Print("err: ", err)
+		return
+	}
+
+	c.JSON(http.StatusOK, nil)
+}

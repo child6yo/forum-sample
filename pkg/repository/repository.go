@@ -23,8 +23,7 @@ type Threads interface {
 	CreateThread(postId int, thread forum.Threads) (int, error)
 	GetThreadById(threadId int) (forum.Threads, error)
 	GetThreadsByPost(postId int) ([]forum.Threads, error)
-	UpdateThread()
-	DeleteThread()
+	UpdateThread(userId, threadId int, input forum.UpdateThreadInput) error
 }
 
 type Repository struct {

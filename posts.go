@@ -25,7 +25,7 @@ type PostsList struct {
 
 type UpdatePostInput struct {
 	Title   *string    `json:"title"`
-	Content *string    `json:"description"`
+	Content *string    `json:"content"`
 	UpdTime *time.Time `json:"upd_time"`
 }
 
