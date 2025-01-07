@@ -12,10 +12,9 @@ type Response struct {
 	Data   any `json:"data"`
 }
 
-
 func errorResponse(c *gin.Context, description string, httpError int, e error) {
 	slog.Error(description, "Error", e)
-	c.AbortWithStatusJSON(httpError, Response{Status: httpError, Data: nil})
+	c.AbortWithStatusJSON(httpError, Response{Status: httpError, Data: e.Error()})
 }
 
 func successResponse(c *gin.Context, description string, data any) {

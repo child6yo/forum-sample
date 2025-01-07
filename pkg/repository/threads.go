@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/child6yo/forum-sample"
@@ -87,7 +88,7 @@ func (r *ThreadsDatabase) UpdateThread(userId, threadId int, input forum.UpdateT
 	if err := r.db.Get(&id, query, threadId); err != nil {
 		return err
 	} else if id != userId {
-		return fmt.Errorf("attempt to update someone else's thread")
+		return errors.New("attempt to update someone else's thread")
 	}
 
 	query = fmt.Sprintf("UPDATE %s SET content=$1, update=true, upd_time=$2 WHERE id=%d",

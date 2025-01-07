@@ -13,21 +13,22 @@ func (h *Handler) signUp(c *gin.Context) {
 	var input forum.User
 
 	if err := c.BindJSON(&input); err != nil {
+		err = fmt.Errorf("invalid request data")
 		errorResponse(c, "sign up", http.StatusBadRequest, err)
 		return
 	}
 
 	id, err := h.services.Authorization.CreateUser(input)
 	if err != nil {
+		err = fmt.Errorf("server error")
 		errorResponse(c, "sign up", http.StatusInternalServerError, err)
 		return
 	}
 
 	successResponse(c, "sign up", map[string]interface{}{
-		"user id": id,
+		"user_id": id,
 	})
 }
-
 
 func (h *Handler) signIn(c *gin.Context) {
 	var input forum.SignIn
@@ -58,19 +59,20 @@ func (h *Handler) userIdentity(c *gin.Context) {
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		err := fmt.Errorf("bad authorizaton request")
+		err := fmt.Errorf("invalid authorizaton header")
 		errorResponse(c, "authorization", http.StatusUnauthorized, err)
 		return
 	}
 
 	if len(headerParts[1]) == 0 {
-		err := fmt.Errorf("bad authorizaton request")
+		err := fmt.Errorf("token is empty")
 		errorResponse(c, "authorization", http.StatusUnauthorized, err)
 		return
 	}
 
 	userId, err := h.services.Authorization.ParseToken(headerParts[1])
 	if err != nil {
+		err = fmt.Errorf("invalid token")
 		errorResponse(c, "authorization", http.StatusUnauthorized, err)
 	}
 

@@ -5,6 +5,8 @@ import (
 	"github.com/child6yo/forum-sample/pkg/repository"
 )
 
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
 type Authorization interface {
 	CreateUser(user forum.User) (int, error)
 	GenerateToken(username, password string) (string, error)

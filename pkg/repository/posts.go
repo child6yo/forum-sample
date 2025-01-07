@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -54,7 +55,7 @@ func (r *PostsDatabase) UpdatePost(userId, postId int, input forum.UpdatePostInp
 	if err := r.db.Get(&id, query, postId); err != nil {
 		return err
 	} else if id != userId {
-		return fmt.Errorf("attempt to update someone else's post")
+		return errors.New("attempt to update someone else's post")
 	}
 
 	setValues := make([]string, 0)
