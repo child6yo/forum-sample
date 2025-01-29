@@ -28,67 +28,67 @@ func TestCreatePost(t *testing.T) {
 		expectedResponseBody string
 	}{
 		{
-			name: "Ok",
+			name:      "Ok",
 			inputBody: `{"title":"title", "content":"content"}`,
 			inputPost: forum.Posts{
-				UserId: 1,
-				Title: "title",
+				UserId:  1,
+				Title:   "title",
 				Content: "content",
-				CrTime: time.Time{},
-				Update: false,
+				CrTime:  time.Time{},
+				Update:  false,
 				UpdTime: time.Time{}},
 			auth_flag: true,
 			mockBehavior: func(s *mock_service.MockPosts, post forum.Posts) {
 				s.EXPECT().CreatePost(post).Return(1, nil)
 			},
-			expectedStatusCode: 200,
+			expectedStatusCode:   200,
 			expectedResponseBody: `{"status":200,"data":{"post_id":1}}`,
 		},
 		{
-			name: "Wrong Authorization",
+			name:      "Wrong Authorization",
 			inputBody: `{"title":"title", "content":"content"}`,
 			inputPost: forum.Posts{
-				UserId: 1,
-				Title: "title",
+				UserId:  1,
+				Title:   "title",
 				Content: "content",
-				CrTime: time.Time{},
-				Update: false,
+				CrTime:  time.Time{},
+				Update:  false,
 				UpdTime: time.Time{}},
-			auth_flag: false,
-			mockBehavior: func(s *mock_service.MockPosts, post forum.Posts) {},
-			expectedStatusCode: 403,
+			auth_flag:            false,
+			mockBehavior:         func(s *mock_service.MockPosts, post forum.Posts) {},
+			expectedStatusCode:   403,
 			expectedResponseBody: `{"status":403,"data":"unknown user"}`,
 		},
 		{
-			name: "Wrong Input",
+			name:      "Wrong Input",
 			inputBody: `{"title":"title"}`,
 			inputPost: forum.Posts{
-				UserId: 1,
-				Title: "title",
+				UserId:  1,
+				Title:   "title",
 				Content: "content",
-				CrTime: time.Time{},
-				Update: false,
+				CrTime:  time.Time{},
+				Update:  false,
 				UpdTime: time.Time{}},
-			auth_flag: true,
-			mockBehavior: func(s *mock_service.MockPosts, post forum.Posts) {},
-			expectedStatusCode: 400,
+			auth_flag:            true,
+			mockBehavior:         func(s *mock_service.MockPosts, post forum.Posts) {},
+			expectedStatusCode:   400,
 			expectedResponseBody: `{"status":400,"data":"invalid request body"}`,
 		},
 		{
-			name: "Internal error",
+			name:      "Internal error",
 			inputBody: `{"title":"title", "content":"content"}`,
-			inputPost: forum.Posts{ 
-				UserId: 1,
-				Title: "title",
+			inputPost: forum.Posts{
+				UserId:  1,
+				Title:   "title",
 				Content: "content",
-				CrTime: time.Time{},
-				Update: false,
+				CrTime:  time.Time{},
+				Update:  false,
 				UpdTime: time.Time{}},
 			auth_flag: true,
 			mockBehavior: func(s *mock_service.MockPosts, post forum.Posts) {
 				s.EXPECT().CreatePost(post).Return(0, errors.New("server error"))
 			},
-			expectedStatusCode: 500,
+			expectedStatusCode:   500,
 			expectedResponseBody: `{"status":500,"data":"server error"}`,
 		},
 	}
@@ -115,7 +115,7 @@ func TestCreatePost(t *testing.T) {
 
 			// Init Test Request
 			w := httptest.NewRecorder()
-			req := httptest.NewRequest("POST", "/posts", 
+			req := httptest.NewRequest("POST", "/posts",
 				bytes.NewBufferString(test.inputBody))
 
 			r.ServeHTTP(w, req)

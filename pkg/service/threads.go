@@ -45,10 +45,6 @@ func (s *ThreadsServise) UpdateThread(userId, threadId int, input forum.UpdateTh
 	return s.repo.UpdateThread(userId, threadId, input)
 }
 
-func (s *ThreadsServise) DeleteThread() {
-	
-}
-
 func OrganizeThreads(threads []forum.Threads) []*forum.ThreadsList {
 	idToThList := make(map[int]*forum.ThreadsList)
 	var ThList []*forum.ThreadsList
