@@ -32,12 +32,10 @@ func (v *Validate) AssignRules(customRules map[string]func(value string, field r
     v.customRules = customRules
 }
 
-// ValidateStruct validates all fields of a struct based on the 'validate' tags.
+// ValidateStruct validates all fields of a struct based on the 'validation' tags.
 // Takes in any struct and returns an error if validation fails.
 //
-// This function uses reflection to iterate over all fields of the struct
-// and validate them using the specified tags. If any field fails validation,
-// an error is returned immediately.
+// Tag keys: username, email, min_len, max_len
 func (v *Validate) ValidateStruct(s interface{}) error {
 	val := reflect.ValueOf(s)
 	typ := reflect.TypeOf(s)
@@ -45,7 +43,7 @@ func (v *Validate) ValidateStruct(s interface{}) error {
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
 		fieldType := typ.Field(i)
-		tag := fieldType.Tag.Get("validate")
+		tag := fieldType.Tag.Get("validation")
 
 		if err := v.validateField(field, tag); err != nil {
 			return err
@@ -136,8 +134,11 @@ func stringToInt(s string) int {
 // Takes in any struct and returns an error if validation fails.
 //
 // This function is similar to ValidateStruct but uses custom validation rules
-// specified in the 'c_validate' tags. If any field fails validation,
+// specified in the 'c_validation' tags. If any field fails validation,
 // an error is returned immediately.
+//
+// c_validation tag keys = customRules keys,
+// tag values = customRules values
 func (v *Validate) CustomValidateStruct(s interface{}) error {
 	val := reflect.ValueOf(s)
 	typ := reflect.TypeOf(s)
@@ -145,7 +146,7 @@ func (v *Validate) CustomValidateStruct(s interface{}) error {
 	for i := 0; i < val.NumField(); i++ {
 		field := val.Field(i)
 		fieldType := typ.Field(i)
-		tag := fieldType.Tag.Get("c_validate")
+		tag := fieldType.Tag.Get("c_validation")
 
 		if err := v.customValidateField(field, tag); err != nil {
 			return err

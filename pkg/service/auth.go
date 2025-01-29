@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/child6yo/forum-sample"
+	"github.com/child6yo/forum-sample/internal/validation"
 	"github.com/child6yo/forum-sample/pkg/repository"
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -31,6 +32,10 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 }
 
 func (s *AuthService) CreateUser(user forum.User) (int, error) {
+	v := validation.NewValidator()
+	if err := v.ValidateStruct(user); err != nil {
+		return 0, err
+	}
 	user.Password = generatePasswordHash(user.Password)
 	return s.repo.CreateUser(user)
 }

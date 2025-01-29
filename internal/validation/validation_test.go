@@ -8,8 +8,8 @@ import (
 
 func TestValidateStruct(t *testing.T) {
 	type User struct {
-		name  string `validate:"symbols=username,max_len=10,min_len=2"`
-		email string `validate:"email"`
+		name  string `validation:"symbols=username,max_len=10,min_len=2"`
+		email string `validation:"email"`
 	}
 
 	testCases := []struct {
@@ -64,7 +64,7 @@ func TestCustomStruct(t *testing.T) {
 		{
 			name: "OK",
 			input: struct {
-				field string `c_validate:"work=true"`
+				field string `c_validation:"work=true"`
 			}{field: "bebe"},
 			customRules: map[string]func(value string, field reflect.Value) error{
 				"work": func(value string, field reflect.Value) error {
@@ -81,7 +81,7 @@ func TestCustomStruct(t *testing.T) {
 		{
 			name: "Invalid string value",
 			input: struct {
-				field string `c_validate:"work=false"`
+				field string `c_validation:"work=false"`
 			}{field: "invalid"},
 			customRules: map[string]func(value string, field reflect.Value) error{
 				"work": func(value string, field reflect.Value) error {
@@ -98,7 +98,7 @@ func TestCustomStruct(t *testing.T) {
 		{
 			name: "Invalid tag value",
 			input: struct {
-				field string `c_validate:"work=false"`
+				field string `c_validation:"work=false"`
 			}{field: "bebe"},
 			customRules: map[string]func(value string, field reflect.Value) error{
 				"work": func(value string, field reflect.Value) error {
