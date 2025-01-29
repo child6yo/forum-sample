@@ -8,9 +8,28 @@ import (
 	"strconv"
 )
 
+type Validator interface {
+    ValidateStruct(s interface{}) error
+    validateField(field reflect.Value, tag string) error
+    CustomValidateStruct(s interface{}) error
+    customValidateField(field reflect.Value, tag string) error
+}
+
 // Validate struct holds custom validation rules
 type Validate struct {
 	customRules map[string]func(value string, field reflect.Value) error
+}
+
+// NewValidator creates and returns a new Validate instance
+func NewValidator() *Validate {
+    return &Validate{}
+}
+
+// AssignRules assigns custom validation rules to the Validate instance
+// Takes in a map of custom rules where the key is the rule name and the value is a function
+// that takes a string and a reflect.Value and returns an error if validation fails
+func (v *Validate) AssignRules(customRules map[string]func(value string, field reflect.Value) error) {
+    v.customRules = customRules
 }
 
 // ValidateStruct validates all fields of a struct based on the 'validate' tags.
