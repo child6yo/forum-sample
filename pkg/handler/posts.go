@@ -9,6 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Create post
+// @Security ApiKeyAuth
+// @Tags Posts
+// @Description create post
+// @ID create-post
+// @Accept  json
+// @Produce  json
+// @Param input body forum.Posts true "post info"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/posts [post]
 func (h *Handler) createPost(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -37,6 +50,19 @@ func (h *Handler) createPost(c *gin.Context) {
 	})
 }
 
+// @Summary Get post
+// @Security ApiKeyAuth
+// @Tags Posts
+// @Description get post by id
+// @ID get-post
+// @Accept  json
+// @Produce  json
+// @Param id path int true "id"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/posts/:id [get]
 func (h *Handler) getPostById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -55,6 +81,18 @@ func (h *Handler) getPostById(c *gin.Context) {
 	successResponse(c, "create post", post)
 }
 
+// @Summary Get all posts
+// @Security ApiKeyAuth
+// @Tags Posts
+// @Description get all posts 
+// @ID get-all-posts
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/posts [get]
 func (h *Handler) getAllPosts(c *gin.Context) {
 	posts, err := h.services.Posts.GetAllPosts()
 	if err != nil {
@@ -66,6 +104,20 @@ func (h *Handler) getAllPosts(c *gin.Context) {
 	successResponse(c, "get all posts", posts)
 }
 
+// @Summary Update post
+// @Security ApiKeyAuth
+// @Tags Posts
+// @Description update post 
+// @ID update-post
+// @Accept  json
+// @Produce  json
+// @Param id path int true "id"
+// @Param input body forum.Posts true "post info"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/posts/:id [put]
 func (h *Handler) updatePost(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -97,6 +149,19 @@ func (h *Handler) updatePost(c *gin.Context) {
 	successResponse(c, "update post", nil)
 }
 
+// @Summary Delete post
+// @Security ApiKeyAuth
+// @Tags Posts
+// @Description delete post 
+// @ID delete-post
+// @Accept  json
+// @Produce  json
+// @Param id path int true "id"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/posts/:id [delete]
 func (h *Handler) deletePost(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

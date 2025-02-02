@@ -28,7 +28,7 @@ func NewValidator() *Validate {
 // AssignRules assigns custom validation rules to the Validate instance
 // Takes in a map of custom rules where the key is the rule name and the value is a function
 // that takes a string and a reflect.Value and returns an error if validation fails
-func (v *Validate) AssignRules(customRules map[string]func(value string, field reflect.Value) error) {
+func (v *Validate) SetRules(customRules map[string]func(value string, field reflect.Value) error) {
     v.customRules = customRules
 }
 

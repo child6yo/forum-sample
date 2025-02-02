@@ -1,0 +1,528 @@
+basePath: /
+definitions:
+  forum.Posts:
+    properties:
+      content:
+        type: string
+      cr_time:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+      upd_time:
+        type: string
+      update:
+        type: boolean
+      user_id:
+        type: integer
+    required:
+    - content
+    - title
+    type: object
+  forum.SignIn:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  forum.Threads:
+    properties:
+      answer_at:
+        type: integer
+      content:
+        type: string
+      cr_time:
+        type: string
+      id:
+        type: integer
+      upd_time:
+        type: string
+      update:
+        type: boolean
+      user_id:
+        type: integer
+    required:
+    - content
+    type: object
+  forum.User:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  handler.Response:
+    properties:
+      data: {}
+      status:
+        type: integer
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API Server for Forum
+  title: Forum API
+  version: "1.0"
+paths:
+  /api/v1/posts:
+    get:
+      consumes:
+      - application/json
+      description: get all posts
+      operationId: get-all-posts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get all posts
+      tags:
+      - Posts
+    post:
+      consumes:
+      - application/json
+      description: create post
+      operationId: create-post
+      parameters:
+      - description: post info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/forum.Posts'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create post
+      tags:
+      - Posts
+  /api/v1/posts/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete post
+      operationId: delete-post
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete post
+      tags:
+      - Posts
+    get:
+      consumes:
+      - application/json
+      description: get post by id
+      operationId: get-post
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get post
+      tags:
+      - Posts
+    put:
+      consumes:
+      - application/json
+      description: update post
+      operationId: update-post
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: post info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/forum.Posts'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update post
+      tags:
+      - Posts
+  /api/v1/posts/:id/threads:
+    post:
+      consumes:
+      - application/json
+      description: create thread
+      operationId: create-thread
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: answer at (another thread). deault=0
+        in: query
+        name: answer
+        type: string
+      - description: thread info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/forum.Threads'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create thread
+      tags:
+      - Threads
+  /api/v1/posts/:id/threads/:
+    get:
+      consumes:
+      - application/json
+      description: get threads by post
+      operationId: get-threads
+      parameters:
+      - description: post id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get threads
+      tags:
+      - Threads
+  /api/v1/thread/:id:
+    get:
+      consumes:
+      - application/json
+      description: get thread by id
+      operationId: get-thread
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get thread
+      tags:
+      - Threads
+    put:
+      consumes:
+      - application/json
+      description: update thread by id
+      operationId: update-thread
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Update thread
+      tags:
+      - Threads
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: login
+      operationId: login
+      parameters:
+      - description: credentials
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/forum.SignIn'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: SignIn
+      tags:
+      - Authentication
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: create account
+      operationId: create-account
+      parameters:
+      - description: account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/forum.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.Response'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.Response'
+      summary: SignUp
+      tags:
+      - Authentication
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

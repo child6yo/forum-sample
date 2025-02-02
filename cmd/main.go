@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -21,6 +22,19 @@ func initConfig() error {
 	viper.SetConfigName("config")
 	return viper.ReadInConfig()
 }
+
+// @title Forum API
+// @version 1.0
+// @description API Server for Forum
+
+// @host localhost:8000
+// @BasePath /
+
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
+
+// docs - /swagger/index.html
 
 func main() {
 	if err := initConfig(); err != nil {
@@ -49,17 +63,17 @@ func main() {
 	
     srv := new(forum.Server)
 	go func() {
-		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
+		if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("error occured while running http server: %s", err.Error())
 		}
 	}()
-	log.Print("TodoApp Started")
+	log.Print("Forum Started")
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
 	<-quit
 
-	log.Print("TodoApp Shutting Down")
+	log.Print("Forum Shutting Down")
 
 	if err := srv.Shutdown(context.Background()); err != nil {
 		log.Printf("error occured on server shutting down: %s", err.Error())

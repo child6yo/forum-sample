@@ -9,6 +9,21 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Create thread
+// @Security ApiKeyAuth
+// @Tags Threads
+// @Description create thread
+// @ID create-thread
+// @Accept  json
+// @Produce  json
+// @Param id path int true "id"
+// @Param answer query string false "answer at (another thread). deault=0"
+// @Param input body forum.Threads true "thread info"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/posts/:id/threads [post]
 func (h *Handler) CreateThread(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {
@@ -50,6 +65,19 @@ func (h *Handler) CreateThread(c *gin.Context) {
 	})
 }
 
+// @Summary Get thread
+// @Security ApiKeyAuth
+// @Tags Threads
+// @Description get thread by id
+// @ID get-thread
+// @Accept  json
+// @Produce  json
+// @Param id path int true "id"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/thread/:id [get]
 func (h *Handler) GetThreadById(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -68,6 +96,19 @@ func (h *Handler) GetThreadById(c *gin.Context) {
 	successResponse(c, "get thread by id", thread)
 }
 
+// @Summary Get threads
+// @Security ApiKeyAuth
+// @Tags Threads
+// @Description get threads by post
+// @ID get-threads
+// @Accept  json
+// @Produce  json
+// @Param id path int true "post id"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/posts/:id/threads/ [get]
 func (h *Handler) GetThreadByPost(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -86,6 +127,19 @@ func (h *Handler) GetThreadByPost(c *gin.Context) {
 	successResponse(c, "get thread by post", threads)
 }
 
+// @Summary Update thread
+// @Security ApiKeyAuth
+// @Tags Threads
+// @Description update thread by id
+// @ID update-thread
+// @Accept  json
+// @Produce  json
+// @Param id path int true "id"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /api/v1/thread/:id [put]
 func (h *Handler) UpdateThread(c *gin.Context) {
 	userId, err := getUserId(c)
 	if err != nil {

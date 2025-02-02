@@ -3,12 +3,23 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
 	"github.com/child6yo/forum-sample"
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary SignUp
+// @Tags Authentication
+// @Description create account
+// @ID create-account
+// @Accept  json
+// @Produce  json
+// @Param input body forum.User true "account info"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	var input forum.User
 
@@ -30,6 +41,19 @@ func (h *Handler) signUp(c *gin.Context) {
 	})
 }
 
+
+// @Summary SignIn
+// @Tags Authentication
+// @Description login
+// @ID login
+// @Accept  json
+// @Produce  json
+// @Param input body forum.SignIn true "credentials"
+// @Success 200 {object} Response
+// @Failure 400,404 {object} Response
+// @Failure 500 {object} Response
+// @Failure default {object} Response
+// @Router /auth/sign-in [post]
 func (h *Handler) signIn(c *gin.Context) {
 	var input forum.SignIn
 
@@ -47,34 +71,4 @@ func (h *Handler) signIn(c *gin.Context) {
 	successResponse(c, "sign in", map[string]interface{}{
 		"token": token,
 	})
-}
-
-func (h *Handler) userIdentity(c *gin.Context) {
-	header := c.GetHeader("Authorization")
-	if header == "" {
-		err := fmt.Errorf("empty authorization header")
-		errorResponse(c, "authorization", http.StatusUnauthorized, err)
-		return
-	}
-
-	headerParts := strings.Split(header, " ")
-	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		err := fmt.Errorf("invalid authorizaton header")
-		errorResponse(c, "authorization", http.StatusUnauthorized, err)
-		return
-	}
-
-	if len(headerParts[1]) == 0 {
-		err := fmt.Errorf("token is empty")
-		errorResponse(c, "authorization", http.StatusUnauthorized, err)
-		return
-	}
-
-	userId, err := h.services.Authorization.ParseToken(headerParts[1])
-	if err != nil {
-		err = fmt.Errorf("invalid token")
-		errorResponse(c, "authorization", http.StatusUnauthorized, err)
-	}
-
-	c.Set("userId", userId)
 }
