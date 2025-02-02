@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  forum-service:
+    build: ./
+    command: ./forum-service
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=Qwerty
+
+  db:
+    restart: always
+    image: postgres:14.1-alpine
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=Qwerty
+    ports:
+      - 5433:5433
+    command: ["postgres", "-p", "5433"]
