@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/child6yo/forum-sample"
-	"github.com/child6yo/forum-sample/pkg/repository"
+	"github.com/child6yo/forum-sample/internal/app/repository"
 )
 
 type ThreadsServise struct {

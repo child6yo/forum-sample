@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/child6yo/forum-sample"
-	"github.com/child6yo/forum-sample/pkg/repository"
+	"github.com/child6yo/forum-sample/internal/app/repository"
 )
 
 //go:generate mockgen -source=service.go -destination=mocks/mock.go

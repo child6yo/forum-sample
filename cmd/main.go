@@ -12,9 +12,9 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 
-	"github.com/child6yo/forum-sample/pkg/handler"
-	"github.com/child6yo/forum-sample/pkg/repository"
-	"github.com/child6yo/forum-sample/pkg/service"
+	"github.com/child6yo/forum-sample/internal/app/handler"
+	"github.com/child6yo/forum-sample/internal/app/repository"
+	"github.com/child6yo/forum-sample/internal/app/service"
 )
 
 func initConfig() error {

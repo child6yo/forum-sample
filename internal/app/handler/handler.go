@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/child6yo/forum-sample/pkg/service"
+	"github.com/child6yo/forum-sample/internal/app/service"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/files"

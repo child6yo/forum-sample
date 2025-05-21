@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/child6yo/forum-sample"
-	"github.com/child6yo/forum-sample/pkg/service"
-	mock_service "github.com/child6yo/forum-sample/pkg/service/mocks"
+	"github.com/child6yo/forum-sample/internal/app/service"
+	mock_service "github.com/child6yo/forum-sample/internal/app/service/mocks"
 	"github.com/gin-gonic/gin"
 	"github.com/magiconair/properties/assert"
 	"go.uber.org/mock/gomock"

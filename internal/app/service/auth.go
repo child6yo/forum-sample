@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/child6yo/forum-sample"
-	"github.com/child6yo/forum-sample/internal/validation"
-	"github.com/child6yo/forum-sample/pkg/repository"
+	"github.com/child6yo/forum-sample/pkg/validation"
+	"github.com/child6yo/forum-sample/internal/app/repository"
 	"github.com/golang-jwt/jwt/v5"
 )
 

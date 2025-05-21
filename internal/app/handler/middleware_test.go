@@ -5,8 +5,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/child6yo/forum-sample/pkg/service"
-	mock_service "github.com/child6yo/forum-sample/pkg/service/mocks"
+	"github.com/child6yo/forum-sample/internal/app/service"
+	mock_service "github.com/child6yo/forum-sample/internal/app/service/mocks"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"go.uber.org/mock/gomock"
