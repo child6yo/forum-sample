@@ -68,9 +68,9 @@ forum-sample
 |   └── main.go
 ├── config/ # contains config files
 ├── docs/ # contains swagger documentation
-├── internal/validation # contains validation library
+├── pkg/validation # contains validation library
 |   └── validation.go
-├── pkg
+├── internal
 |   ├── handler
 |   |   ├── auth.go
 |   |   ├── handler.go # contains routes initialization
